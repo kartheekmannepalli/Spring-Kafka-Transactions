@@ -11,6 +11,14 @@ public class Customer {
     private int id;
     private String customerName;
 
+    public Customer() {
+    }
+
+    public Customer(int id, String name) {
+        this.id = id;
+        this.customerName = name;
+    }
+
     @Id
     @Column(name = "id")
     public int getId() {
