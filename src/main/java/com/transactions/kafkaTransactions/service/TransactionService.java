@@ -8,8 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.transactions.kafkaTransactions.config.KafkaTopicConfig.CREATE_CUSTOMER_TOPIC;
 import static com.transactions.kafkaTransactions.config.KafkaTopicConfig.DELETE_CUSTOMER_TOPIC;

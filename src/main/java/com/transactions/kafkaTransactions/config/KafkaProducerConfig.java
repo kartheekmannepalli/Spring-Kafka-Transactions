@@ -21,6 +21,7 @@ public class KafkaProducerConfig {
     public ProducerFactory<String, String> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+//        configProps.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, "prod1-tx");
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         return new DefaultKafkaProducerFactory<>(configProps);
@@ -28,6 +29,8 @@ public class KafkaProducerConfig {
 
     @Bean
     public KafkaTemplate<String, String> kafkaTemplate() {
+        ProducerFactory<String, String> factory = producerFactory();
+        System.out.println(factory.getTransactionIdPrefix() + "------------------------" + factory.transactionCapable());
         return new KafkaTemplate<>(producerFactory());
     }
 }
