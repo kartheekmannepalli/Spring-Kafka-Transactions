@@ -24,7 +24,11 @@ public class KafkaProducerConfig {
 //        configProps.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, "prod1-tx");
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        return new DefaultKafkaProducerFactory<>(configProps);
+        configProps.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
+        configProps.put(ProducerConfig.TRANSACTION_TIMEOUT_CONFIG, 1000);
+        DefaultKafkaProducerFactory<String, String> factory = new DefaultKafkaProducerFactory<>(configProps);
+        factory.setTransactionIdPrefix("tx-");
+        return factory;
     }
 
     @Bean
