@@ -18,15 +18,27 @@ public class TransactionController {
         return "Spring & Kafka Transaction Test application";
     }
 
-    @RequestMapping("/createCustomer")
+    @RequestMapping("/createTransactional")
     public String createCustomer(@RequestParam Integer id, @RequestParam String name) {
-        this.transactionService.createCustomer(id, name);
+        this.transactionService.createTransactional(id, name);
         return "Created Customer";
     }
 
-    @RequestMapping("/deleteCustomer/{id}")
+    @RequestMapping("/createNonTransactional")
+    public String createCustomer2(@RequestParam Integer id, @RequestParam String name) {
+        this.transactionService.createNonTransactional(id, name);
+        return "Created Customer";
+    }
+
+    @RequestMapping("/deleteTransactional/{id}")
     public String deleteCustomer(@PathVariable Integer id) {
-        this.transactionService.deleteCustomer(id);
+        this.transactionService.deleteTransactional(id);
+        return "Created Customer";
+    }
+
+    @RequestMapping("/deleteNonTransactional/{id}")
+    public String deleteCustomer2(@PathVariable Integer id) {
+        this.transactionService.deleteNonTransactional(id);
         return "Created Customer";
     }
 

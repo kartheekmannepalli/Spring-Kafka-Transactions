@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.transactions.kafkaTransactions.repository.Customer;
 import com.transactions.kafkaTransactions.repository.CustomerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -15,16 +14,28 @@ import static com.transactions.kafkaTransactions.config.KafkaTopicConfig.DELETE_
 
 @Service
 public class TransactionService {
-    CustomerRepository customerRepository;
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private final CustomerRepository customerRepository;
+    private final KafkaTemplate<String, String> kafkaTransactionalTemplate;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public TransactionService(CustomerRepository customerRepository) {
+    public TransactionService(CustomerRepository customerRepository, KafkaTemplate<String,
+            String> kafkaTransactionalTemplate, KafkaTemplate<String, String> kafkaTemplate) {
         this.customerRepository = customerRepository;
+        this.kafkaTransactionalTemplate = kafkaTransactionalTemplate;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @Transactional
-    public void createCustomer(int id, String name) {
+    public void createTransactional(int id, String name) {
+        kafkaTransactionalTemplate.send(CREATE_CUSTOMER_TOPIC, getJsonString(id, name));
+        if(customerRepository.existsById(id))
+            throw new DuplicateKeyException("Customer Already Exists");
+        Customer customer = new Customer(id, name);
+        customerRepository.save(customer);
+    }
+
+    @Transactional
+    public void createNonTransactional(int id, String name) {
         kafkaTemplate.send(CREATE_CUSTOMER_TOPIC, getJsonString(id, name));
         if(customerRepository.existsById(id))
             throw new DuplicateKeyException("Customer Already Exists");
@@ -33,7 +44,13 @@ public class TransactionService {
     }
 
     @Transactional
-    public void deleteCustomer(Integer id) {
+    public void deleteTransactional(Integer id) {
+        kafkaTransactionalTemplate.send(DELETE_CUSTOMER_TOPIC, String.valueOf(id));
+        customerRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteNonTransactional(Integer id) {
         kafkaTemplate.send(DELETE_CUSTOMER_TOPIC, String.valueOf(id));
         customerRepository.deleteById(id);
     }
