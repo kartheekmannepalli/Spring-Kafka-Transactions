@@ -5,12 +5,12 @@
 * Spring Kafka
 * Postgres DB
 * Kafka Broker and Zookeeper
-* KafDrop - Optional (To view kafka messages and topics)
+* KafDrop - Optional (http://localhost:9000 - view kafka messages and topics)
 
 ## Setup
 1) Run `docker-compose -f src/main/KT-Docker/compose.yml up -d` to create Postrges, Kafka, KafDrop containers in Docker.
      - Re-run kafka container if it crashes the first time.
-3) `mvn install -DskipTests` to download all spring dependencies.
+3) `mvn install -DskipTests` to download all spring dependencies. Works with `JDK 11` and above.
 4) Run the `KafkaTransactionsApplication` class to start the spring boot application.
      - This step will automatically create a `Customer` database table in postgres.
        - Customer Table has just two columns `id` and `name`.
@@ -31,6 +31,7 @@
     - Since we are non using a transactional kafka template, a new message is published to `create.customer` topic but the data is not saved to the database. 
 
 ### Consuming a message while producing another message
+- Uncomment lines 27,28 in `CustomerMessageHandler` to test transaction synchronization.
 - Run `curl --url "http://localhost:8080/createNonTransactional?id=2&name=test"`.
     - This will publish a message to `create.customer` and this message will be read by the KafkaListener.
     - Since the Listener Container is chained with kafkaTransaction, any message produced using transactional Kafka template will synchronize with DB transacitons.

@@ -24,8 +24,8 @@ public class CustomerMessageHandler {
         //Note: This event will not be committed
         kafkaTransactionalTemplate.send(DELETE_CUSTOMER_TOPIC, "23");
         //Note: This event will be published even if there was an exception
-        kafkaTemplate.send(DELETE_CUSTOMER_TOPIC, "45");
-        throw new Exception("time pass");
+//        kafkaTemplate.send(DELETE_CUSTOMER_TOPIC, "45");
+//        throw new Exception("time pass");
     }
 
     @Transactional
