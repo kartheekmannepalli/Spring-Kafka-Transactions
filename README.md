@@ -1,4 +1,4 @@
-# Atomic Operations with Spring and Kafka Transactions
+# Atomic Operations with Spring and Kafka Transaction Synchronization
  A simple Spring Boot Application to demo the workings of Spring + kafka transactions to support atomic operations.
 
 ## Dependencies
@@ -30,6 +30,10 @@
     - This request will throw a `DuplicateKeyException`.
     - Since we are non using a transactional kafka template, a new message is published to `create.customer` topic but the data is not saved to the database. 
 
+### Consuming a message while producing another message
+- Run `curl --url "http://localhost:8080/createNonTransactional?id=2&name=test"`.
+    - This will publish a message to `create.customer` and this message will be read by the KafkaListener.
+    - Since the Listener Container is chained with kafkaTransaction, any message produced using transactional Kafka template will synchronize with DB transacitons.
 
 ## References
 - Spring + Kafka Transactions - https://docs.spring.io/spring-kafka/reference/html/#transaction-synchronization
