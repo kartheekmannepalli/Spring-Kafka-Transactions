@@ -21,8 +21,10 @@ public class CustomerMessageHandler {
     @KafkaListener(topics = CREATE_CUSTOMER_TOPIC, groupId = "customer")
     public void listenToCreateCustomerTransactional(String message) throws Exception {
         System.out.println("Received Message in group customer: " + message);
+        //Note: This event will not be committed
         kafkaTransactionalTemplate.send(DELETE_CUSTOMER_TOPIC, "23");
-//        kafkaTemplate.send(DELETE_CUSTOMER_TOPIC, "45");
+        //Note: This event will be published even if there was an exception
+        kafkaTemplate.send(DELETE_CUSTOMER_TOPIC, "45");
         throw new Exception("time pass");
     }
 

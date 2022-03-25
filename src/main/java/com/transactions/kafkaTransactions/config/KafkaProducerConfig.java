@@ -35,10 +35,15 @@ public class KafkaProducerConfig {
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
         DefaultKafkaProducerFactory<String, String> factory = new DefaultKafkaProducerFactory<>(configProps);
+        //Note: Setting the transaction prefix will make the producer transactional
         factory.setTransactionIdPrefix("tx-");
         return factory;
     }
 
+    /**
+     * Added this Bean so that it can be used with the listener container config.
+     * @return
+     */
     @Bean
     public KafkaTransactionManager<String, String> kafkaTransactionManager() {
         return new KafkaTransactionManager<>(transactionalProducerFactory());

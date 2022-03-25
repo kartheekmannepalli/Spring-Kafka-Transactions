@@ -38,6 +38,7 @@ public class KafkaConsumerConfig {
         ConcurrentKafkaListenerContainerFactory<String, String> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
+        //Note: Making the Listener container transactional
         factory.getContainerProperties().setTransactionManager(kafkaTransactionManager);
         return factory;
     }

@@ -15,6 +15,11 @@ public class KafkaTransactionsApplication {
 		SpringApplication.run(KafkaTransactionsApplication.class, args);
 	}
 
+	/**
+	 * Need to add this Bean to avoid ambiguous bean exception as spring was unable to determine if it should use transactionManager or kafkaTransactionManager
+	 * @param entityManagerFactory
+	 * @return
+	 */
 	@Bean
 	@Primary
 	public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {

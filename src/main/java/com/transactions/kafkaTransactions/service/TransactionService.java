@@ -27,6 +27,7 @@ public class TransactionService {
 
     @Transactional
     public void createTransactional(int id, String name) {
+        //Note: This kafka message will not be committed
         kafkaTransactionalTemplate.send(CREATE_CUSTOMER_TOPIC, getJsonString(id, name));
         if(customerRepository.existsById(id))
             throw new DuplicateKeyException("Customer Already Exists");
@@ -45,6 +46,7 @@ public class TransactionService {
 
     @Transactional
     public void deleteTransactional(Integer id) {
+        //Note: This kafka message will not be committed if delete throws an exception
         kafkaTransactionalTemplate.send(DELETE_CUSTOMER_TOPIC, String.valueOf(id));
         customerRepository.deleteById(id);
     }
