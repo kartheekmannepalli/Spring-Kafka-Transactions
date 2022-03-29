@@ -39,3 +39,4 @@
 ## References
 - Spring + Kafka Transactions - https://docs.spring.io/spring-kafka/reference/html/#transaction-synchronization
 - Kafka Transaction Coordinator - https://www.confluent.io/blog/transactions-apache-kafka/#:~:text=The%20transaction%20coordinator%20is%20a,its%20broker%20is%20the%20leader.
+- Kafka Transactions and Exactly Once Explained - https://ssudan16.medium.com/exactly-once-processing-in-kafka-explained-66ecc41a8548
