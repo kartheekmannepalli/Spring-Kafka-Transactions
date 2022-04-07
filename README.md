@@ -19,7 +19,7 @@
 ## Usage
 - To create a new Customer run `curl --url "http://localhost:8080/createTransactional?id=1&name=test"`
     - This will create save a new record in the DB with ID 1 and also publish a message to `create.customer` topic.  
-### Producing a message
+### Producing a message with transactions
 #### Testing atomic operations with a Transactional Kafka Template
 - Run `curl --url "http://localhost:8080/createTransactional?id=1&name=test"` again for ID 1.
     - This request will throw a `DuplicateKeyException` which should rollback the kafka message published.
